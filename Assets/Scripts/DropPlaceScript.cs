@@ -54,12 +54,48 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
                             gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[1]);
                             break;
 
-                        case "Ambulance":
+                        case "medicine":
                             gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[2]);
                             break;
 
                         case "School":
                             gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[3]);
+                            break;
+
+                        case "b2":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[5]);
+                            break;
+
+                        case "Police":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[6]);
+                            break;
+
+                        case "cement":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[7]);
+                            break;
+
+                        case "escavator":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[8]);
+                            break;
+
+                        case "e46":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[9]);
+                            break;
+
+                        case "e61":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[10]);
+                            break;
+
+                        case "tractor1":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[11]);
+                            break;
+
+                        case "tractor5":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[12]);
+                            break;
+
+                        case "firefighter":
+                            gameObjectsScript.carSoundSource.PlayOneShot(gameObjectsScript.sounds[13]);
                             break;
 
                         default:

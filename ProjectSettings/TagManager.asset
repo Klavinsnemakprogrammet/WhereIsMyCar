@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 3
   tags:
   - Garbage
-  - Ambulance
   - School
   - Police
   - b2
@@ -16,6 +15,7 @@ TagManager:
   - tractor1
   - tractor5
   - firefighter
+  - medicine
   layers:
   - Default
   - TransparentFX
