@@ -367,6 +367,7 @@ GameObject:
   - component: {fileID: 449420541}
   - component: {fileID: 449420542}
   - component: {fileID: 449420543}
+  - component: {fileID: 449420544}
   m_Layer: 0
   m_Name: ScriptHolder
   m_TagString: Untagged
@@ -435,6 +436,19 @@ MonoBehaviour:
   minY: 0
   maxY: 0
   reductionFactor: 0.02
+--- !u!114 &449420544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449420540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da9738d7c54c59458a59255994ab75b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameObjectsScript: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,7 +698,7 @@ RectTransform:
   m_GameObject: {fileID: 620332904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 78528970}
