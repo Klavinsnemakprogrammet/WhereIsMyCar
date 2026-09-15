@@ -66,6 +66,15 @@ public class ObjectTransformationScript : MonoBehaviour
                     
                     }
                 }
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    if(GameObjectsScript.lastDragged.GetComponent<RectTransform>().localScale.x < 0.9f)
+                    {
+                    GameObjectsScript.lastDragged.GetComponent<RectTransform>().localScale =
+                    new Vector3(GameObjectsScript.lastDragged.GetComponent<RectTransform>().localScale.x * -1f,
+                    GameObjectsScript.lastDragged.GetComponent<RectTransform>().localScale.y, 1f);
+                    }
+                }
             }
         }
     }
