@@ -65,5 +65,7 @@ public class GameObjectsScript : MonoBehaviour
         tractor1Coord = tractor1.GetComponent<RectTransform>().localPosition;
         tractor5Coord = tractor5.GetComponent<RectTransform>().localPosition;
         firefighterCoord = firefighter.GetComponent<RectTransform>().localPosition;
+
     }
+   
 }
