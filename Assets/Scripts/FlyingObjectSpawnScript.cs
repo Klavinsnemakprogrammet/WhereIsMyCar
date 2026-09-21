@@ -16,7 +16,7 @@ public class FlyingObjectSpawnScript : MonoBehaviour
     public float cloudSpawnInterval = 2f;
     public float planeSpawnInterval = 3f;
 
-    private float minX, maxY;
+    private float minY, maxY;
 
     [Header("Cloud Speed")]
     public float CloudMinSpeed = 2f;
@@ -28,7 +28,7 @@ public class FlyingObjectSpawnScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ScreenBoundariesScript = Object.FindFirstObjectByType<ScreenBoundariesScript>();
+        screenBoundariesScript = Object.FindFirstObjectByType<ScreenBoundariesScript>();
         minY = screenBoundariesScript.minY;
         maxY = screenBoundariesScript.maxY;
         InvokeRepeating(nameof(SpawnCloud), 0f, cloudSpawnInterval);
@@ -44,10 +44,11 @@ public class FlyingObjectSpawnScript : MonoBehaviour
         GameObject prefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
         float y = Random.Range(minY, maxY);
         Vector3 pos = new Vector3(spawnPoint.position.x, y, spawnPoint.position.z);
-        GameObject cloud = Instantiate(CloudMinSpeed, CloudMaxSpeed);
+        GameObject cloud = Instantiate(prefab,pos, Quaternion.identity, spawnPoint);
+        float speed = Random.Range(CloudMinSpeed, CloudMaxSpeed);
 
         FlyingObjectControllerScript controller = 
-            plane.GetComponent<FlyingObjectControllerScript>();
+            cloud.GetComponent<FlyingObjectControllerScript>();
         if (controller != null)
             controller.speed = speed;
     }
@@ -57,7 +58,8 @@ public class FlyingObjectSpawnScript : MonoBehaviour
         GameObject prefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
         float y = Random.Range(minY, maxY);
         Vector3 pos = new Vector3(-spawnPoint.position.x, y, spawnPoint.position.z);
-        GameObject plane = Instantiate(PlaneMinSpeed, PlaneMaxSpeed);
+        GameObject plane = Instantiate(prefab, pos, Quaternion.identity, spawnPoint);
+        float speed = Random.Range(PlaneMinSpeed, PlaneMaxSpeed);
 
         FlyingObjectControllerScript controller =
             plane.GetComponent<FlyingObjectControllerScript>();
