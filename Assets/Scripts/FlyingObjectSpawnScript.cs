@@ -54,8 +54,8 @@ public class FlyingObjectSpawnScript : MonoBehaviour
     }
     void SpawnPlane()
     {
-        if (cloudPrefabs.Length == 0) return;
-        GameObject prefab = cloudPrefabs[Random.Range(0, cloudPrefabs.Length)];
+        if (planePrefabs.Length == 0) return;
+        GameObject prefab = planePrefabs[Random.Range(0, planePrefabs.Length)];
         float y = Random.Range(minY, maxY);
         Vector3 pos = new Vector3(-spawnPoint.position.x, y, spawnPoint.position.z);
         GameObject plane = Instantiate(prefab, pos, Quaternion.identity, spawnPoint);
