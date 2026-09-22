@@ -16,6 +16,7 @@ TagManager:
   - tractor5
   - firefighter
   - medicine
+  - bomb
   layers:
   - Default
   - TransparentFX
