@@ -31,6 +31,9 @@ public class GameObjectsScript : MonoBehaviour
     [HideInInspector] public Vector2 tractor5Coord;
     [HideInInspector] public Vector2 firefighterCoord;
 
+    [Range(0f, 1f)]
+    public float flipChance = 0.5f; // chance that each object is mirrored horizontally (x * -1)
+
     public Canvas canvas;
     public AudioSource carSoundSource;
     public AudioClip[] sounds;
@@ -69,7 +72,16 @@ public class GameObjectsScript : MonoBehaviour
         for (int i = 0; i < cars.Length; i++)
         {
             Vector2 pos = slots[i].GetComponent<RectTransform>().localPosition;
-            cars[i].GetComponent<RectTransform>().localPosition = pos;
+            RectTransform rt = cars[i].GetComponent<RectTransform>();
+            rt.localPosition = pos;
+
+            // 50% chance to flip horizontally: x * -1
+            if (Random.value < flipChance)
+            {
+                Vector3 scale = rt.localScale;
+                scale.x *= -1f;
+                rt.localScale = scale;
+            }
         }
 
         // 5. Cache the new "correct" coords for each car
