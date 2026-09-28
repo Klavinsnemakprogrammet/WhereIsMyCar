@@ -1705,8 +1705,8 @@ MonoBehaviour:
   homeButton: {fileID: 70028377}
   citySceneName: CityScene
   startSceneName: StartScene
-  threeStarTime: 60
-  twoStarTime: 120
+  threeStarTime: 120
+  twoStarTime: 240
   totalCars: 12
   audioSource: {fileID: 924728430}
   victorySound: {fileID: 8300000, guid: 3c681cfdb70fdec4ea845409ec84d606, type: 3}
