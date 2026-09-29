@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GameObjectsScript : MonoBehaviour
 {
+    [Header("Cars")]
     public GameObject garbageTruck;
     public GameObject medicine;
     public GameObject schoolBus;
@@ -15,6 +16,20 @@ public class GameObjectsScript : MonoBehaviour
     public GameObject tractor1;
     public GameObject tractor5;
     public GameObject firefighter;
+
+    [Header("Places (same order as cars)")]
+    public GameObject garbageTruckPlace;
+    public GameObject medicinePlace;
+    public GameObject schoolBusPlace;
+    public GameObject policePlace;
+    public GameObject b2Place;
+    public GameObject cementPlace;
+    public GameObject escavatorPlace;
+    public GameObject e46Place;
+    public GameObject e61Place;
+    public GameObject tractor1Place;
+    public GameObject tractor5Place;
+    public GameObject firefighterPlace;
 
     public Transform carPlaces; // parent holding the 32 empties named "1".."32"
 
@@ -61,30 +76,42 @@ public class GameObjectsScript : MonoBehaviour
             (slots[i], slots[j]) = (slots[j], slots[i]);
         }
 
-        // 3. Cars in the same order you want them placed
+        // 3. Cars and their matching Places, in the same order
         GameObject[] cars =
         {
             garbageTruck, medicine, schoolBus, police, b2, cement,
             escavator, e46, e61, tractor1, tractor5, firefighter
         };
 
-        // 4. Assign the first 12 shuffled slots to the cars
-        for (int i = 0; i < cars.Length; i++)
+        GameObject[] places =
         {
-            Vector2 pos = slots[i].GetComponent<RectTransform>().localPosition;
-            RectTransform rt = cars[i].GetComponent<RectTransform>();
-            rt.localPosition = pos;
+            garbageTruckPlace, medicinePlace, schoolBusPlace, policePlace, b2Place, cementPlace,
+            escavatorPlace, e46Place, e61Place, tractor1Place, tractor5Place, firefighterPlace
+        };
 
-            // 50% chance to flip horizontally: x * -1
-            if (Random.value < flipChance)
-            {
-                Vector3 scale = rt.localScale;
-                scale.x *= -1f;
-                rt.localScale = scale;
-            }
+        if (slots.Count < cars.Length + places.Length)
+        {
+            Debug.LogError($"Need at least {cars.Length + places.Length} slots, but only found {slots.Count}.");
+            return;
         }
 
-        // 5. Cache the new "correct" coords for each car
+        // 4. Cars take shuffled slots 0..11
+        for (int i = 0; i < cars.Length; i++)
+        {
+            RectTransform rt = cars[i].GetComponent<RectTransform>();
+            rt.localPosition = slots[i].GetComponent<RectTransform>().localPosition;
+            FlipRandomly(rt);
+        }
+
+        // 5. Places take shuffled slots 12..23 (no overlap with cars)
+        for (int i = 0; i < places.Length; i++)
+        {
+            RectTransform rt = places[i].GetComponent<RectTransform>();
+            rt.localPosition = slots[cars.Length + i].GetComponent<RectTransform>().localPosition;
+            FlipRandomly(rt);
+        }
+
+        // 6. Cache the new "correct" coords for each car
         garbageTruckCoord = garbageTruck.GetComponent<RectTransform>().localPosition;
         medicineCoord = medicine.GetComponent<RectTransform>().localPosition;
         schoolBusCoord = schoolBus.GetComponent<RectTransform>().localPosition;
@@ -97,5 +124,15 @@ public class GameObjectsScript : MonoBehaviour
         tractor1Coord = tractor1.GetComponent<RectTransform>().localPosition;
         tractor5Coord = tractor5.GetComponent<RectTransform>().localPosition;
         firefighterCoord = firefighter.GetComponent<RectTransform>().localPosition;
+    }
+
+    void FlipRandomly(RectTransform rt)
+    {
+        if (Random.value < flipChance)
+        {
+            Vector3 scale = rt.localScale;
+            scale.x *= -1f;
+            rt.localScale = scale;
+        }
     }
 }

@@ -9,6 +9,8 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
     public GameObjectsScript gameObjectsScript;
     public GameFinishScript gameFinishScript;
 
+    public float sizeTolerance = 0.15f; // max allowed size difference (was 0.08)
+
     void Awake()
     {
         gameObjectsScript = Object.FindFirstObjectByType<GameObjectsScript>();
@@ -38,7 +40,7 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
                 Debug.Log("Diff Y Size: " + ySizeDiff);
 
                 if ((diffZRot <= 7 || (diffZRot >= 353 && diffZRot <= 360)) &&
-                    (xSizeDiff <= 0.08f && ySizeDiff <= 0.08f))
+                    (xSizeDiff <= sizeTolerance && ySizeDiff <= sizeTolerance))
                 {
                     Debug.Log("Car placed correctly!");
                     gameObjectsScript.inRightPlace = true;
