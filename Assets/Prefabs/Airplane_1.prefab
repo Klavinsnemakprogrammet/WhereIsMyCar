@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4306388134265127272}
   - component: {fileID: 2363989606061654254}
   - component: {fileID: 3715097278263506322}
+  - component: {fileID: 5076035625912712331}
   m_Layer: 5
   m_Name: Airplane_1
   m_TagString: Untagged
@@ -134,7 +135,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 115.4, y: 90}
+  m_Size: {x: 97.7, y: 62.3}
   m_EdgeRadius: 0
 --- !u!114 &3715097278263506322
 MonoBehaviour:
@@ -152,3 +153,15 @@ MonoBehaviour:
   fadeDuration: 1
   waveAmplitude: 10
   waveFrequency: 3
+--- !u!114 &5076035625912712331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7044711647886214432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

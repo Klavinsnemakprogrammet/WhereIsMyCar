@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7910941603423758362}
   - component: {fileID: 8535345878110336132}
   - component: {fileID: 4344093482642346986}
+  - component: {fileID: -3374434759311353450}
   m_Layer: 5
   m_Name: Cloud_0
   m_TagString: Untagged
@@ -122,7 +123,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 114.5, y: 88.7}
+  m_Size: {x: 100.48, y: 56.1}
   m_EdgeRadius: 0
 --- !u!225 &8535345878110336132
 CanvasGroup:
@@ -152,3 +153,15 @@ MonoBehaviour:
   fadeDuration: 1.5
   waveAmplitude: 25
   waveFrequency: 1
+--- !u!114 &-3374434759311353450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2851273092315097755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
