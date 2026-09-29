@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7511559845749897660}
   - component: {fileID: 7314202884052433833}
   - component: {fileID: 6084135265642654881}
-  - component: {fileID: 2777423009450305773}
+  - component: {fileID: 519185265340203234}
   m_Layer: 5
   m_Name: Cloud_1
   m_TagString: Untagged
@@ -153,7 +153,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &2777423009450305773
+--- !u!114 &519185265340203234
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,6 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2470306070855368118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
+  m_Script: {fileID: 11500000, guid: c1074470a4322ed489ec52f43f42269c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitCooldown: 1.5

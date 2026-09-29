@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5508537181468840716}
   - component: {fileID: 3468095595553306614}
   - component: {fileID: 1885353890340068389}
+  - component: {fileID: 3829729633021835724}
   - component: {fileID: 8372893925193368926}
-  - component: {fileID: 25702539013091344}
   m_Layer: 5
   m_Name: FlyingBomb
   m_TagString: bomb
@@ -142,8 +142,20 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -14}
-  m_Radius: 44.6
+  m_Offset: {x: 0, y: -6.3}
+  m_Radius: 63.7
+--- !u!114 &3829729633021835724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6785885496104487463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1074470a4322ed489ec52f43f42269c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8372893925193368926
 Animator:
   serializedVersion: 7
@@ -166,15 +178,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &25702539013091344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6785885496104487463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -19,6 +19,7 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (GameObjectsScript.dragCancelled) return;
         if ((eventData.pointerDrag != null) && Input.GetMouseButtonUp(0) &&
             (!Input.GetMouseButton(2)))
         {
@@ -127,7 +128,7 @@ public class DropPlaceScript : MonoBehaviour, IDropHandler
                             gameObjectsScript.garbageTruckCoord;
                         break;
 
-                    case "Ambulance":
+                    case "medicine":
                         gameObjectsScript.medicine.GetComponent<RectTransform>().localPosition =
                              gameObjectsScript.medicineCoord;
                         break;

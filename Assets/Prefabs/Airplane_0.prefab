@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 829878342022081954}
   - component: {fileID: 8508301434893963544}
   - component: {fileID: 6156390473165482678}
-  - component: {fileID: 5149700285994153851}
+  - component: {fileID: 1737312715994861744}
   m_Layer: 5
   m_Name: Airplane_0
   m_TagString: Untagged
@@ -151,9 +151,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 98.3, y: 58.6}
+  m_Size: {x: 98.66, y: 59.6}
   m_EdgeRadius: 0
---- !u!114 &5149700285994153851
+--- !u!114 &1737312715994861744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,6 +162,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1083798046508971648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
+  m_Script: {fileID: 11500000, guid: c1074470a4322ed489ec52f43f42269c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

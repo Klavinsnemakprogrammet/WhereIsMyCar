@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7910941603423758362}
   - component: {fileID: 8535345878110336132}
   - component: {fileID: 4344093482642346986}
-  - component: {fileID: -3374434759311353450}
+  - component: {fileID: 6471912643612429270}
   m_Layer: 5
   m_Name: Cloud_0
   m_TagString: Untagged
@@ -153,7 +153,7 @@ MonoBehaviour:
   fadeDuration: 1.5
   waveAmplitude: 25
   waveFrequency: 1
---- !u!114 &-3374434759311353450
+--- !u!114 &6471912643612429270
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,6 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2851273092315097755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3253fb64ab9570c4d9f7dcf9ca491fba, type: 3}
+  m_Script: {fileID: 11500000, guid: c1074470a4322ed489ec52f43f42269c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitCooldown: 1.5

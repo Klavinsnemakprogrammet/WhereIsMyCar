@@ -1,75 +1,88 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LivesScript : MonoBehaviour
 {
-    public int maxLives = 3;
-
-    [Header("UI")]
-    public Image[] hearts;          // drag your 3 heart Images here, left to right
-    public Sprite fullHeart;        // optional: if empty, lost hearts are just hidden
-    public Sprite emptyHeart;       // optional
-    public GameObject gameOverPanel; // optional
-
+    public static LivesScript Instance;
     public static bool isGameOver = false;
 
+    [Header("Lives")]
+    public int maxLives = 3;
+    public float hitCooldown = 1.5f;   // seconds after a hit where more hits are ignored
+
+    [Header("UI")]
+    public GameObject[] hearts;        // drag the 3 heart objects from the Hierarchy, left to right
+    public GameObject gameOverPanel;   // optional
+
     private int lives;
+    private float lastHitTime = -999f;
 
     void Awake()
     {
+        Instance = this;
         Time.timeScale = 1f;
         isGameOver = false;
         lives = maxLives;
+        lastHitTime = -999f;
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
+        if (hearts == null || hearts.Length == 0)
+            Debug.LogWarning("LivesScript: Hearts array is empty!", this);
+
         UpdateHearts();
     }
 
-    public void LoseLife()
+    void OnDestroy()
     {
-        if (isGameOver) return;
+        if (Instance == this) Instance = null;
+    }
 
-        lives--;
+    public bool LoseLife()
+    {
+        if (isGameOver) return false;
+        if (Time.unscaledTime - lastHitTime < hitCooldown) return false;
+
+        lastHitTime = Time.unscaledTime;
+        lives = Mathf.Max(0, lives - 1);
+        Debug.Log("Lives left: " + lives, this);
+
         UpdateHearts();
-        Debug.Log("Lives left: " + lives);
 
         if (lives <= 0)
             GameOver();
+
+        return true;
     }
 
     void UpdateHearts()
     {
+        if (hearts == null) return;
+
         for (int i = 0; i < hearts.Length; i++)
         {
-            bool alive = i < lives;
-
-            if (fullHeart != null && emptyHeart != null)
+            if (hearts[i] == null)
             {
-                hearts[i].enabled = true;
-                hearts[i].sprite = alive ? fullHeart : emptyHeart;
+                Debug.LogWarning("Heart slot " + i + " is empty!", this);
+                continue;
             }
-            else
-            {
-                hearts[i].enabled = alive;
-            }
+            hearts[i].SetActive(i < lives);
         }
     }
 
     void GameOver()
     {
         isGameOver = true;
-        Debug.Log("Game Over!");
+        Debug.Log("Game Over!", this);
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
-        Time.timeScale = 0f; // freeze the game
+        Time.timeScale = 0f;
     }
 
-    // Hook this up to a Restart button's OnClick
+    // Hook to the Restart button's OnClick
     public void Restart()
     {
         Time.timeScale = 1f;

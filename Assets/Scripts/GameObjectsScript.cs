@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class GameObjectsScript : MonoBehaviour
 {
+    public static GameObjectsScript Instance;
+    public static bool dragCancelled = false; // true after a car was sent back mid-drag
+
+    private class SpawnState { public Vector3 pos, scale; public Quaternion rot; }
+    private readonly Dictionary<GameObject, SpawnState> spawnStates = new Dictionary<GameObject, SpawnState>();
     [Header("Cars")]
     public GameObject garbageTruck;
     public GameObject medicine;
@@ -59,6 +64,8 @@ public class GameObjectsScript : MonoBehaviour
 
     void Awake()
     {
+        Instance = this;
+        dragCancelled = false;
         AssignRandomPositions();
     }
 
@@ -124,6 +131,13 @@ public class GameObjectsScript : MonoBehaviour
         tractor1Coord = tractor1.GetComponent<RectTransform>().localPosition;
         tractor5Coord = tractor5.GetComponent<RectTransform>().localPosition;
         firefighterCoord = firefighter.GetComponent<RectTransform>().localPosition;
+        
+        spawnStates.Clear();
+        foreach (GameObject car in cars)
+        {
+            RectTransform r = car.GetComponent<RectTransform>();
+            spawnStates[car] = new SpawnState { pos = r.localPosition, scale = r.localScale, rot = r.localRotation };
+        }
     }
 
     void FlipRandomly(RectTransform rt)
@@ -134,5 +148,19 @@ public class GameObjectsScript : MonoBehaviour
             scale.x *= -1f;
             rt.localScale = scale;
         }
+    }
+    public void ReturnToSpawn(GameObject car)
+    {
+        if (!spawnStates.TryGetValue(car, out SpawnState s)) return;
+
+        RectTransform rt = car.GetComponent<RectTransform>();
+        rt.localPosition = s.pos;
+        rt.localScale = s.scale;
+        rt.localRotation = s.rot;
+
+        // Cancel the current drag so OnDrag stops moving the car
+        dragCancelled = true;
+        isDragging = false;
+        lastDragged = null;
     }
 }
