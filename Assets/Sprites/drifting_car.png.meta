@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      drifting_car_0: -1397260936571074957
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
