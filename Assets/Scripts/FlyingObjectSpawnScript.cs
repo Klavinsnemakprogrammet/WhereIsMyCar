@@ -29,8 +29,8 @@ public class FlyingObjectSpawnScript : MonoBehaviour
     void Start()
     {
         screenBoundariesScript = Object.FindFirstObjectByType<ScreenBoundariesScript>();
-        minY = screenBoundariesScript.minY;
-        maxY = screenBoundariesScript.maxY;
+        minY = screenBoundariesScript.worldBounds.yMin;
+        maxY = screenBoundariesScript.worldBounds.yMax;
         InvokeRepeating(nameof(SpawnCloud), 0f, cloudSpawnInterval);
         InvokeRepeating(nameof(SpawnPlane), 0f, planeSpawnInterval);
     }

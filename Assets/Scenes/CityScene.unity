@@ -1661,7 +1661,7 @@ MonoBehaviour:
   escavator: {fileID: 821468823}
   e46: {fileID: 5599914}
   e61: {fileID: 242060322}
-  tractor1: {fileID: 0}
+  tractor1: {fileID: 1042305127}
   tractor5: {fileID: 2112466776}
   firefighter: {fileID: 1610234268}
   garbageTruckPlace: {fileID: 620332904}
@@ -1724,11 +1724,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   screenPoint: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
-  minX: 0
-  maxX: 0
-  minY: 0
-  maxY: 0
+  worldBounds:
+    serializedVersion: 2
+    x: -10
+    y: -5
+    width: 20
+    height: 10
   reductionFactor: 0.02
+  mainCamera: {fileID: 0}
 --- !u!114 &449420544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1741,8 +1744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da9738d7c54c59458a59255994ab75b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectsScript: {fileID: 0}
-  rotateSpeed: 40
+  rotationSpeed: 90
   scaleSpeed: 0.25
 --- !u!114 &449420545
 MonoBehaviour:
@@ -2146,9 +2148,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxZoom: 530
   minZoom: 150
-  panSpeed: 6
-  zoomJump: 50
+  pinchZoomSpeed: 0.9
+  mouseScrollSpeed: 150
+  mouseFollowSpeed: 1
+  touchPanSpeed: 1
+  screenBoundriesScript: {fileID: 0}
   mainCamera: {fileID: 0}
+  doubleTapMaxDelay: 0.4
+  doubleTapMaxDistance: 100
 --- !u!1 &527318764
 GameObject:
   m_ObjectHideFlags: 0

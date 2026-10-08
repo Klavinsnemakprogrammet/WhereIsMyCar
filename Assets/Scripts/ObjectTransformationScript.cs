@@ -1,54 +1,57 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ObjectTransformationScript : MonoBehaviour
 {
-    public GameObjectsScript gameObjectsScript;
+    
 
-    [Header("Speeds")]
-    public float rotateSpeed = 40f;   // degrees per second (was 10)
-    public float scaleSpeed = 0.25f;  // scale units per second (was ~0.06 at 60 FPS)
-
-    private const float MinScale = 0.3f;
-    private const float MaxScale = 1f;
-
-    private void Awake()
-    {
-        gameObjectsScript = FindAnyObjectByType<GameObjectsScript>();
-    }
+    public float rotationSpeed = 90f;
+    public float scaleSpeed = 0.5f;
+    private bool rotateCW, rotateCCW, scaleUpY, scaleDownY, scaleUpX, scaleDownX;
+    public static bool isTransforming = false;
 
     void Update()
     {
-        if (GameObjectsScript.lastDragged == null) return;
-
-        RectTransform rt = GameObjectsScript.lastDragged.GetComponent<RectTransform>();
-
-        // Rotate
-        if (Input.GetKey(KeyCode.Z)) rt.Rotate(0, 0, rotateSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.X)) rt.Rotate(0, 0, -rotateSpeed * Time.deltaTime);
-
-        // Scale (works for both normal and mirrored objects)
-        Vector3 s = rt.localScale;
-        float signX = s.x < 0 ? -1f : 1f;
-        float absX = Mathf.Abs(s.x);
-        float y = s.y;
-        float step = scaleSpeed * Time.deltaTime;
-
-        if (Input.GetKey(KeyCode.UpArrow)) y += step;
-        if (Input.GetKey(KeyCode.DownArrow)) y -= step;
-        if (Input.GetKey(KeyCode.RightArrow)) absX += step;
-        if (Input.GetKey(KeyCode.LeftArrow)) absX -= step;
-
-        y = Mathf.Clamp(y, MinScale, MaxScale);
-        absX = Mathf.Clamp(absX, MinScale, MaxScale);
-
-        rt.localScale = new Vector3(signX * absX, y, 1f);
-
-        // Flip horizontally
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(GameObjectsScript.lastDragged == null)
         {
-            Vector3 f = rt.localScale;
-            f.x *= -1f;
-            rt.localScale = f;
+            return;
         }
+        RectTransform rc = GameObjectsScript.lastDragged.GetComponent<RectTransform>();
+        if (rotateCW)
+        {
+            rc.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+        }
+        if(rotateCCW)
+        {
+            rc.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+        }
+        if(scaleUpY && rc.localScale.y < 0.9f)    
+        {
+            rc.localScale += new Vector3(0, scaleSpeed * Time.deltaTime, 0);
+        }
+        if(scaleDownY && rc.localScale.y > 0.3f)
+        {
+            rc.localScale -= new Vector3(scaleSpeed * Time.deltaTime, 0, 0);
+
+        }
+        isTransforming = rotateCW || rotateCCW || scaleUpY || scaleDownY || scaleUpX || scaleDownX;
+
     }
+    public void StartRotateCW(BaseEventData eventData) {rotateCW = true;}
+    public void StartRotateCCW(BaseEventData eventData) { rotateCCW = true;}
+    public void StopRotateCW(BaseEventData eventData) { rotateCW = false;}
+    public void StopRotateCCW(BaseEventData eventData) { rotateCCW = false;}
+    public void StartScaleUpY(BaseEventData eventData) { scaleUpY = true; }
+    public void StopScaleUpY(BaseEventData eventData) { scaleUpY = false; }
+    public void StartScaleDownX(BaseEventData eventData) { scaleDownX = true; }
+    public void StopScaleDownX(BaseEventData eventData) { scaleDownX = false; }
+    public void StartScaleUpX(BaseEventData eventData) { scaleUpX = true; }
+    public void StopScaleUpX(BaseEventData eventData) { scaleUpX = false; }
+    public void StartScaleDownY(BaseEventData eventData) { scaleDownY = true; }
+    public void StopScaleDownY(BaseEventData eventData) { scaleDownY = false; }
+
+
+
+
 }
