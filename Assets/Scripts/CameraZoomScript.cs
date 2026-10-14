@@ -86,7 +86,7 @@ public class CameraZoomScript : MonoBehaviour
         Vector3 targetWorld = mainCamera.ScreenToWorldPoint(screenPoint);
         Vector3 targetPosition = new Vector3(targetWorld.x, targetWorld.y, transform.position.z);
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, mouseFollowSpeed + Time.unscaledDeltaTime);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, mouseFollowSpeed * Time.unscaledDeltaTime);
     }
 
     void HandleTouch()
