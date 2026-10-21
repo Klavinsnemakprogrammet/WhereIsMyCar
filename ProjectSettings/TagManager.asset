@@ -17,6 +17,7 @@ TagManager:
   - firefighter
   - medicine
   - bomb
+  - InterstitialAdButton
   layers:
   - Default
   - TransparentFX

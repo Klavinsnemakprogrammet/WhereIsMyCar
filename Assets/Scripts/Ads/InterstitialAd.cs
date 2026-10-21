@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.Rendering;
@@ -79,32 +80,69 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
 
     public void OnUnityAdsAdLoaded(string placementId)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Interstitial ad loaded successfully!");
+        _interstitialAdButton.interactable = true;
+        isReady = true;
+        OnInterstitialAdReady?.Invoke();
     }
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
-        throw new System.NotImplementedException();
+        Debug.LogError($"Failed to load interstitial ad: {error.ToString()} - {message}");
+        LoadAd();
     }
 
     public void OnUnityAdsShowClick(string placementId)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Interstitial ad clicked!");
     }
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
     {
-        throw new System.NotImplementedException();
+        if(showCompletionState == UnityAdsShowCompletionState.COMPLETED)
+        {
+            Debug.Log("Interstital ad completed successfully!");
+            StartCoroutine(SlowDownTimeTemporarily(30f));
+            LoadAd();
+        }
+        else
+        {
+            Debug.LogWarning($"Interstitial ad was not completed: {showCompletionState.ToString()}");
+            Time.timeScale = 1f;
+            LoadAd();
+        }
+    }
+
+    private IEnumerator SlowDownTimeTemporarily(float duration)
+    {
+        Time.timeScale = 0.3f;
+        Debug.Log("Time slowed down for " + duration + " seconds.");
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+        Debug.Log("Time restored to normal.");
     }
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
     {
-        throw new System.NotImplementedException();
+        Debug.LogError($"Failed to show interstitial ad: {error.ToString()} - {message}");
+        LoadAd();
     }
 
     public void OnUnityAdsShowStart(string placementId)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Interstitial ad started showing!");
+        Time.timeScale = 0f;
+    }
+
+    public void SetButton(Button button)
+    {
+       if(button == null)
+       return;
+       button.onClick.RemoveAllListeners();
+       button.onClick.AddListener(OnInterstitialAdButtonClicked);
+       _interstitialAdButton = button;
+       _interstitialAdButton.interactable = false;
+       
     }
 
    
