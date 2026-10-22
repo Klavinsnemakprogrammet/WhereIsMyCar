@@ -10,6 +10,8 @@ public class AdManager : MonoBehaviour
     private bool firstAdShown = false;
     public RewardedAds rewardedAds;
     [SerializeField] bool turnOffRewardedAds = false;
+    public BannerAd bannerAd;
+    [SerializeField] bool turnOffBannerAds = false;
 
     public static AdManager Instance { get; private set; }
 
@@ -47,11 +49,21 @@ public class AdManager : MonoBehaviour
         {
             rewardedAds.LoadAd();
         }
+        if(!turnOffBannerAds)
+        {
+            bannerAd.LoadBanner();
+        }
 
     }
     // velak papildinas prieks parejam reklamam
     private void HandleInterstitialReady()
     {
+        if(!firstAdShown)
+        {
+            Debug.Log("Showing interstitial ad for the first time!");
+            interstitialAd.ShowAd();
+            firstAdShown = true;
+        }
         Debug.Log("Interstitial ad is ready to be shown!");
     }
     private void OnEnable()
@@ -82,7 +94,12 @@ public class AdManager : MonoBehaviour
             {
                 rewardedAds.SetButton(rewardedAdButton);
             }
-            // velak papildinas ar parejam pogam 
+            Button bannerAdButton = GameObject.FindGameObjectWithTag("BannerAdButton").GetComponent<Button>();    
+            if(bannerAdButton != null && bannerAd != null)
+            {
+                bannerAd.SetButton(bannerAdButton);
+            }
+            
 
             if(!firstSceneLoaded)
             {

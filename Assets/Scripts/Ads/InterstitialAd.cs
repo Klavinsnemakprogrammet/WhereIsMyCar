@@ -53,7 +53,8 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
     {
         if(isReady)
         {
-            // Papildināsim priekš banner ad
+            if(AdManager.Instance.bannerAd.isBannerVisable)
+            AdManager.Instance.bannerAd.HideBannerAd();
 
             Advertisement.Show(_adUnitId, this);
             isReady = false;
