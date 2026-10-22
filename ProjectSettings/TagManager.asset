@@ -18,6 +18,7 @@ TagManager:
   - medicine
   - bomb
   - InterstitialAdButton
+  - RewardedAdButton
   layers:
   - Default
   - TransparentFX

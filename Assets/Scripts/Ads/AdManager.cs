@@ -7,10 +7,14 @@ public class AdManager : MonoBehaviour
     public AdsInitializer adsInitializer;
     public InterstitialAd interstitialAd;
     [SerializeField] bool turnOffInterstitialAds = false;
+    private bool firstAdShown = false;
+    public RewardedAds rewardedAds;
+    [SerializeField] bool turnOffRewardedAds = false;
 
     public static AdManager Instance { get; private set; }
 
     private bool firstSceneLoaded = false;
+
 
     // Turpināsim...
     private void Awake()
@@ -39,6 +43,10 @@ public class AdManager : MonoBehaviour
             interstitialAd.OnInterstitialAdReady += HandleInterstitialReady;
             interstitialAd.LoadAd();
         }
+        if(!turnOffRewardedAds)
+        {
+            rewardedAds.LoadAd();
+        }
 
     }
     // velak papildinas prieks parejam reklamam
@@ -66,6 +74,14 @@ public class AdManager : MonoBehaviour
                 interstitialAd.SetButton(interstitalButton);
             }
 
+            if(rewardedAds == null)
+                rewardedAds = FindFirstObjectByType<RewardedAds>();
+
+            Button rewardedAdButton = GameObject.FindGameObjectWithTag("RewardedAdButton").GetComponent<Button>();    
+            if(rewardedAdButton != null && rewardedAds != null)
+            {
+                rewardedAds.SetButton(rewardedAdButton);
+            }
             // velak papildinas ar parejam pogam 
 
             if(!firstSceneLoaded)
