@@ -69,7 +69,8 @@ public class DragAndDropScript : MonoBehaviour,
                 = Camera.main.ScreenToWorldPoint(cursScreenPoint) +
                   screenBoundariesScript.offset;
 
-            rectTransform.position = screenBoundariesScript.GetClampedPosition(curPosition);
+            rectTransform.position =
+                screenBoundariesScript.GetClampedPosition(curPosition, rectTransform);
         }
     }
 

@@ -5,9 +5,9 @@ public class ScreenBoundariesScript : MonoBehaviour
     [HideInInspector]
     public Vector3 screenPoint, offset;
     
-    public Rect worldBounds = new Rect(-10f, -5f, 20f, 10f);
+    public Rect worldBounds = new Rect(-960f, -540f, 1920f, 1080f);
     [Range(0f, 0.5f)]
-    public float reductionFactor = 0.02f; //2% no ekrāna izmēra 
+    public float reductionFactor = 0f;
 
     public Camera mainCamera;
     public float minCamX { get; private set; }
@@ -18,6 +18,7 @@ public class ScreenBoundariesScript : MonoBehaviour
     float lastOrthographicSize;
     float lastAspect;
     Vector3 lastCamPos;
+    readonly Vector3[] rectWorldCorners = new Vector3[4];
 
 
     void Awake()
@@ -110,6 +111,48 @@ public class ScreenBoundariesScript : MonoBehaviour
         float clampedY = Mathf.Clamp(curPosition.y, wbMinY, wbMaxY);
         return new Vector2(clampedX, clampedY);
     }
+
+    public Vector2 GetClampedPosition(Vector3 curPosition, RectTransform rectTransform)
+    {
+        if (rectTransform == null)
+        {
+            return GetClampedPosition(curPosition);
+        }
+
+        rectTransform.GetWorldCorners(rectWorldCorners);
+
+        float minOffsetX = rectWorldCorners[0].x - rectTransform.position.x;
+        float maxOffsetX = minOffsetX;
+        float minOffsetY = rectWorldCorners[0].y - rectTransform.position.y;
+        float maxOffsetY = minOffsetY;
+
+        for (int i = 1; i < rectWorldCorners.Length; i++)
+        {
+            float offsetX = rectWorldCorners[i].x - rectTransform.position.x;
+            float offsetY = rectWorldCorners[i].y - rectTransform.position.y;
+            minOffsetX = Mathf.Min(minOffsetX, offsetX);
+            maxOffsetX = Mathf.Max(maxOffsetX, offsetX);
+            minOffsetY = Mathf.Min(minOffsetY, offsetY);
+            maxOffsetY = Mathf.Max(maxOffsetY, offsetY);
+        }
+
+        float shrinkW = worldBounds.width * reductionFactor;
+        float shrinkH = worldBounds.height * reductionFactor;
+        float minX = worldBounds.xMin + shrinkW - minOffsetX;
+        float maxX = worldBounds.xMax - shrinkW - maxOffsetX;
+        float minY = worldBounds.yMin + shrinkH - minOffsetY;
+        float maxY = worldBounds.yMax - shrinkH - maxOffsetY;
+
+        float clampedX = minX > maxX
+            ? (minX + maxX) * 0.5f
+            : Mathf.Clamp(curPosition.x, minX, maxX);
+        float clampedY = minY > maxY
+            ? (minY + maxY) * 0.5f
+            : Mathf.Clamp(curPosition.y, minY, maxY);
+
+        return new Vector2(clampedX, clampedY);
+    }
+
     public Vector3 GetClampedCameraPosition(Vector3 desireCameraCenter)
     {
         float clampedX = Mathf.Clamp(desireCameraCenter.x, minCamX, maxCamX);

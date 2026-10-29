@@ -2203,11 +2203,11 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   worldBounds:
     serializedVersion: 2
-    x: -683
-    y: -384
-    width: 1366
-    height: 768
-  reductionFactor: 0.02
+    x: -960
+    y: -540
+    width: 1920
+    height: 1080
+  reductionFactor: 0
   mainCamera: {fileID: 519420031}
 --- !u!114 &449420544
 MonoBehaviour:
@@ -2610,8 +2610,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1131828607}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
@@ -5544,7 +5543,7 @@ RectTransform:
   m_GameObject: {fileID: 1131828606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 376423954}
@@ -5553,7 +5552,7 @@ RectTransform:
   - {fileID: 1418909320}
   - {fileID: 700973180}
   - {fileID: 2132934429}
-  m_Father: {fileID: 519420032}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7049,10 +7048,10 @@ RectTransform:
   - {fileID: 2145251024}
   m_Father: {fileID: 1131828607}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1652094326
 GameObject:
@@ -8302,7 +8301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -1134.2}
+  m_AnchoredPosition: {x: 0, y: 115}
   m_SizeDelta: {x: 282.07, y: 182.70001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2145251026
@@ -8404,6 +8403,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
+  - {fileID: 1131828607}
   - {fileID: 619394802}
   - {fileID: 78528970}
   - {fileID: 1487934267}
