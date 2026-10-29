@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 /// <summary>
 /// Tower of Hanoi controller.
@@ -10,6 +12,9 @@ using UnityEngine.Events;
 /// </summary>
 public class HanoiTower : MonoBehaviour
 {
+    private const float UiDiscStackSpacing = 0.7f;
+    private const float UiLiftTopPadding = 8f;
+
     [Header("Setup")]
     [Tooltip("The 3 pegs. Each needs a Collider so it can be clicked.")]
     [SerializeField] private Transform[] pegs = new Transform[3];
@@ -45,13 +50,91 @@ public class HanoiTower : MonoBehaviour
     private bool won;
 
     private Camera cam;
+    private GraphicRaycaster uiRaycaster;
+    private RectTransform uiCanvasRect;
+    private bool isUiPuzzle;
 
     public int Moves => moves;
 
     private void Start()
     {
+        if (!ValidateSetup()) return;
+
         cam = Camera.main;
+        isUiPuzzle = pegs[0] is RectTransform && discs[0] is RectTransform;
+        if (isUiPuzzle)
+        {
+            Canvas canvas = pegs[0].GetComponentInParent<Canvas>();
+            uiRaycaster = canvas != null ? canvas.GetComponent<GraphicRaycaster>() : null;
+            uiCanvasRect = canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
+            if (uiRaycaster == null || uiCanvasRect == null)
+            {
+                Debug.LogError("HanoiTower UI setup needs a GraphicRaycaster and a RectTransform Canvas.", this);
+                enabled = false;
+                return;
+            }
+        }
+        else if (cam == null)
+        {
+            Debug.LogError("HanoiTower needs a camera tagged MainCamera to click world-space pegs.", this);
+            enabled = false;
+            return;
+        }
+
         ResetPuzzle(true);
+    }
+
+    private bool ValidateSetup()
+    {
+        if (pegs == null || pegs.Length != 3 || discs == null || discs.Length == 0)
+        {
+            Debug.LogError("HanoiTower setup needs exactly 3 pegs and at least 1 disc.", this);
+            enabled = false;
+            return false;
+        }
+
+        for (int i = 0; i < pegs.Length; i++)
+        {
+            if (pegs[i] == null)
+            {
+                Debug.LogError($"HanoiTower Pegs element {i} is not assigned in the Inspector.", this);
+                enabled = false;
+                return false;
+            }
+        }
+
+        for (int i = 0; i < discs.Length; i++)
+        {
+            if (discs[i] == null)
+            {
+                Debug.LogError($"HanoiTower Discs element {i} is not assigned in the Inspector.", this);
+                enabled = false;
+                return false;
+            }
+        }
+
+        bool uiSetup = pegs[0] is RectTransform && discs[0] is RectTransform;
+        for (int i = 0; i < pegs.Length; i++)
+        {
+            if ((pegs[i] is RectTransform) != uiSetup)
+            {
+                Debug.LogError("HanoiTower pegs and discs must all use either UI RectTransforms or world-space Transforms.", this);
+                enabled = false;
+                return false;
+            }
+        }
+
+        for (int i = 0; i < discs.Length; i++)
+        {
+            if ((discs[i] is RectTransform) != uiSetup)
+            {
+                Debug.LogError("HanoiTower pegs and discs must all use either UI RectTransforms or world-space Transforms.", this);
+                enabled = false;
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void Update()
@@ -60,7 +143,7 @@ public class HanoiTower : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            int peg = GetPegUnderMouse();
+            int peg = isUiPuzzle ? GetUiPegUnderMouse() : GetWorldPegUnderMouse();
             if (peg >= 0) OnPegClicked(peg);
         }
     }
@@ -90,14 +173,41 @@ public class HanoiTower : MonoBehaviour
             discSize[discs[i]] = discs.Length - i;
 
             // Push largest first so the smallest ends up on top
-            discs[i].position = GetSlotPosition(0, stacks[0].Count);
+            discs[i].position = GetSlotPosition(0, stacks[0].Count, discs[i]);
             stacks[0].Push(discs[i]);
         }
     }
 
     // ---------- Input ----------
 
-    private int GetPegUnderMouse()
+    private int GetUiPegUnderMouse()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            Debug.LogError("HanoiTower UI clicks need an active EventSystem in the scene.", this);
+            enabled = false;
+            return -1;
+        }
+
+        var pointer = new PointerEventData(eventSystem) { position = Input.mousePosition };
+        var hits = new List<RaycastResult>();
+        uiRaycaster.Raycast(pointer, hits);
+
+        foreach (RaycastResult hit in hits)
+        {
+            Transform hitTransform = hit.gameObject.transform;
+            for (int i = 0; i < pegs.Length; i++)
+            {
+                if (hitTransform == pegs[i] || hitTransform.IsChildOf(pegs[i]))
+                    return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private int GetWorldPegUnderMouse()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit)) return -1;
@@ -119,7 +229,7 @@ public class HanoiTower : MonoBehaviour
 
             heldDisc = stacks[pegIndex].Pop();
             heldFrom = pegIndex;
-            StartCoroutine(MoveTo(heldDisc, GetLiftPosition(pegIndex)));
+            StartCoroutine(MoveTo(heldDisc, GetLiftPosition(pegIndex, heldDisc)));
         }
         else
         {
@@ -158,8 +268,8 @@ public class HanoiTower : MonoBehaviour
         Transform disc = heldDisc;
 
         // Slide over the target peg, then lower into place
-        yield return MoveTo(disc, GetLiftPosition(pegIndex), true);
-        yield return MoveTo(disc, GetSlotPosition(pegIndex, stacks[pegIndex].Count), true);
+        yield return MoveTo(disc, GetLiftPosition(pegIndex, disc), true);
+        yield return MoveTo(disc, GetSlotPosition(pegIndex, stacks[pegIndex].Count, disc), true);
 
         stacks[pegIndex].Push(disc);
 
@@ -187,8 +297,8 @@ public class HanoiTower : MonoBehaviour
         Transform disc = heldDisc;
         int from = heldFrom;
 
-        yield return MoveTo(disc, GetLiftPosition(from), true);
-        yield return MoveTo(disc, GetSlotPosition(from, stacks[from].Count), true);
+        yield return MoveTo(disc, GetLiftPosition(from, disc), true);
+        yield return MoveTo(disc, GetSlotPosition(from, stacks[from].Count, disc), true);
 
         stacks[from].Push(disc);
         heldDisc = null;
@@ -212,13 +322,89 @@ public class HanoiTower : MonoBehaviour
 
     // ---------- Positions ----------
 
-    private Vector3 GetSlotPosition(int pegIndex, int level)
+    private Vector3 GetSlotPosition(int pegIndex, int level, Transform disc)
     {
+        if (isUiPuzzle)
+        {
+            RectTransform pegRect = (RectTransform)pegs[pegIndex];
+            RectTransform discRect = (RectTransform)disc;
+            Transform discParent = discRect.parent;
+            Vector3 localBottom = GetUiPegBottomInParent(pegRect, discParent);
+            float discHeightInParent = GetUiRenderedDiscHeightInParent(discRect, discParent);
+            float discsBelowHeight = GetUiStackHeightInParent(stacks[pegIndex], discParent);
+
+            return discParent.TransformPoint(
+                localBottom + Vector3.up * (discsBelowHeight * UiDiscStackSpacing + discHeightInParent * 0.5f));
+        }
+
         return pegs[pegIndex].position + Vector3.up * (baseOffset + level * discHeight);
     }
 
-    private Vector3 GetLiftPosition(int pegIndex)
+    private Vector3 GetLiftPosition(int pegIndex, Transform disc)
     {
+        if (isUiPuzzle)
+        {
+            RectTransform pegRect = (RectTransform)pegs[pegIndex];
+            RectTransform discRect = (RectTransform)disc;
+            Transform discParent = discRect.parent;
+            Vector3 localBottom = GetUiPegBottomInParent(pegRect, discParent);
+            float discHeightInParent = GetUiRenderedDiscHeightInParent(discRect, discParent);
+            float stackHeight = GetUiStackHeightInParent(stacks[pegIndex], discParent);
+            float topDiscHeight = stacks[pegIndex].Count > 0
+                ? GetUiRenderedDiscHeightInParent((RectTransform)stacks[pegIndex].Peek(), discParent)
+                : 0f;
+            float stackVisualTop = stacks[pegIndex].Count > 0
+                ? (stackHeight - topDiscHeight) * UiDiscStackSpacing + topDiscHeight
+                : 0f;
+            float desiredY = localBottom.y + stackVisualTop + discHeightInParent * 0.75f;
+            float canvasTop = GetUiRectTopInParent(uiCanvasRect, discParent);
+            float maxCenterY = canvasTop - discHeightInParent * 0.5f - UiLiftTopPadding;
+
+            return discParent.TransformPoint(new Vector3(
+                localBottom.x,
+                Mathf.Min(desiredY, maxCenterY),
+                localBottom.z));
+        }
+
         return pegs[pegIndex].position + Vector3.up * liftHeight;
+    }
+
+    private static Vector3 GetUiPegBottomInParent(RectTransform peg, Transform parent)
+    {
+        Vector3 pegBottom = peg.TransformPoint(new Vector3(0f, peg.rect.yMin, 0f));
+        return parent.InverseTransformPoint(pegBottom);
+    }
+
+    private static float GetUiRenderedDiscHeightInParent(RectTransform disc, Transform parent)
+    {
+        float renderedHeight = disc.rect.height;
+        Image image = disc.GetComponent<Image>();
+        if (image != null && image.preserveAspect && image.sprite != null)
+        {
+            float aspect = image.sprite.rect.width / image.sprite.rect.height;
+            if (aspect > 0f)
+                renderedHeight = Mathf.Min(renderedHeight, disc.rect.width / aspect);
+        }
+
+        Vector3 discHeight = parent.InverseTransformVector(
+            disc.TransformVector(Vector3.up * renderedHeight));
+        return Mathf.Abs(discHeight.y);
+    }
+
+    private static float GetUiStackHeightInParent(Stack<Transform> stack, Transform parent)
+    {
+        float height = 0f;
+        foreach (Transform stackedDisc in stack)
+            height += GetUiRenderedDiscHeightInParent((RectTransform)stackedDisc, parent);
+        return height;
+    }
+
+    private static float GetUiRectTopInParent(RectTransform rect, Transform parent)
+    {
+        Vector3[] corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+        return Mathf.Max(
+            parent.InverseTransformPoint(corners[1]).y,
+            parent.InverseTransformPoint(corners[2]).y);
     }
 }
