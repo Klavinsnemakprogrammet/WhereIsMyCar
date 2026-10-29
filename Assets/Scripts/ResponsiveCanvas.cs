@@ -11,6 +11,7 @@ public class ResponsiveCanvas : MonoBehaviour
     [SerializeField] RectTransform driftCar;
     [SerializeField] RectTransform startButton;
     [SerializeField] RectTransform exitButton;
+    [SerializeField] RectTransform Hanoja;
 
     RectTransform canvasRect;
     Vector2 lastCanvasSize;
@@ -69,6 +70,7 @@ public class ResponsiveCanvas : MonoBehaviour
         driftCar ??= FindChildRect("DriftCar");
         startButton ??= FindChildRect("StartButton");
         exitButton ??= FindChildRect("ExitButton");
+        Hanoja ??= FindChildRect("Hanoja");
     }
 
     RectTransform FindChildRect(string objectName)
@@ -127,6 +129,7 @@ public class ResponsiveCanvas : MonoBehaviour
             SetLayout(logo, new Vector2(0.5f, 0.87f), new Vector2(canvasSize.x * 0.7f, canvasSize.y * 0.2f));
             SetLayout(driftCar, new Vector2(0.5f, 0.55f), new Vector2(canvasSize.x * 0.72f, canvasSize.y * 0.34f));
             SetLayout(startButton, new Vector2(0.5f, 0.23f), new Vector2(canvasSize.x * 0.68f, canvasSize.y * 0.1f));
+            SetLayout(Hanoja, new Vector2(0.5f, 0.34f), new Vector2(canvasSize.x * 0.68f, canvasSize.y * 0.1f));
             SetLayout(exitButton, new Vector2(0.5f, 0.11f), new Vector2(canvasSize.x * 0.68f, canvasSize.y * 0.1f));
         }
         else
@@ -135,6 +138,7 @@ public class ResponsiveCanvas : MonoBehaviour
             SetLayout(driftCar, new Vector2(0.43f, 0.52f), new Vector2(canvasSize.x * 0.32f, canvasSize.y * 0.5f));
             SetLayout(startButton, new Vector2(0.82f, 0.43f), new Vector2(canvasSize.x * 0.23f, canvasSize.y * 0.13f));
             SetLayout(exitButton, new Vector2(0.82f, 0.28f), new Vector2(canvasSize.x * 0.23f, canvasSize.y * 0.13f));
+            SetLayout(Hanoja, new Vector2(0.82f, 0.58f), new Vector2(canvasSize.x * 0.23f, canvasSize.y * 0.13f));
         }
     }
 

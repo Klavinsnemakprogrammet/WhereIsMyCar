@@ -34,18 +34,31 @@ public class BannerAd : MonoBehaviour
     void OnBannerLoaded()
     {
         Debug.Log("Banner ad loaded successfully.");
-        _bannerButton.interactable = true;
+        CancelInvoke(nameof(LoadBanner));
+        if (_bannerButton != null)
+        {
+            _bannerButton.interactable = true;
+        }
 
+        if (AdManager.Instance == null ||
+            AdManager.Instance.interstitialAd == null ||
+            !AdManager.Instance.interstitialAd.isShowing)
+        {
+            ShowBannerAd();
+        }
     }
     void OnBannerError(string message)
     {
-        Debug.Log($"Banner ad failed to load: {message}");
-        LoadBanner();
+        Debug.LogWarning($"Banner ad failed to load: {message}");
+        CancelInvoke(nameof(LoadBanner));
+        Invoke(nameof(LoadBanner), 5f);
     }
     public void ShowBannerAd()
     {
         if (isBannerVisable)
-        HideBannerAd();
+        {
+            HideBannerAd();
+        }
 
         else
         {
@@ -75,13 +88,16 @@ public class BannerAd : MonoBehaviour
     public void HideBannerAd()
     {
         Advertisement.Banner.Hide();
+        isBannerVisable = false;
     }
 
     public void SetButton(Button button)
     {
-        if(button == null)
+        if (button == null)
+        {
             return;
-        
+        }
+
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(ShowBannerAd);
         _bannerButton = button;
