@@ -36,6 +36,7 @@ public class HanoiTower : MonoBehaviour
     private int selectedFrom = -1;
     private int activeDiscCount;
     private int moves;
+    private int rewardedMoveCredit;
     private bool busy;
     private bool won;
     private RectTransform discParent;
@@ -44,7 +45,7 @@ public class HanoiTower : MonoBehaviour
     private bool stackBaseInitialized;
     private bool initialized;
 
-    public int Moves => moves;
+    public int Moves => Mathf.Max(0, moves - rewardedMoveCredit);
     public int DiscCount => activeDiscCount;
     public int DiscCapacity => discs != null ? discs.Length : 0;
 
@@ -229,6 +230,15 @@ public class HanoiTower : MonoBehaviour
         ResetPuzzle();
     }
 
+    public void ApplyRewardedMoveDiscount(int count)
+    {
+        if (count <= 0 || won)
+            return;
+
+        rewardedMoveCredit += count;
+        onMoveCountChanged?.Invoke(Moves);
+    }
+
     [ContextMenu("Reset Puzzle")]
     public void ResetPuzzle()
     {
@@ -239,9 +249,10 @@ public class HanoiTower : MonoBehaviour
         busy = false;
         won = false;
         moves = 0;
+        rewardedMoveCredit = 0;
         selectedDisc = null;
         selectedFrom = -1;
-        onMoveCountChanged?.Invoke(moves);
+        onMoveCountChanged?.Invoke(Moves);
 
         for (int i = 0; i < stacks.Length; i++)
             stacks[i] = new Stack<Transform>();
@@ -381,7 +392,7 @@ public class HanoiTower : MonoBehaviour
         selectedDisc = null;
         selectedFrom = -1;
         moves++;
-        onMoveCountChanged?.Invoke(moves);
+        onMoveCountChanged?.Invoke(Moves);
         busy = false;
 
         if (stacks[pegs.Length - 1].Count == activeDiscCount)

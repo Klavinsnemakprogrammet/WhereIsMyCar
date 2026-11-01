@@ -9,6 +9,7 @@ public class DiscSelector : MonoBehaviour
     [SerializeField] private Button decreaseButton;
     [SerializeField] private Button increaseButton;
     [SerializeField] private TMP_Text countText;
+    [SerializeField] private TMP_Text moveCountText;
 
     private int selectedDiscCount;
 
@@ -45,17 +46,59 @@ public class DiscSelector : MonoBehaviour
 
         selectedDiscCount = Mathf.Clamp(startingDiscCount, HanoiTower.MinimumDiscCount, hanoiTower.DiscCapacity);
         hanoiTower.SetDiscCount(selectedDiscCount);
+        if (!FindMoveCountText())
+        {
+            enabled = false;
+            return;
+        }
+
+        hanoiTower.onMoveCountChanged.AddListener(RefreshMoveCount);
         decreaseButton.onClick.AddListener(DecreaseDiscCount);
         increaseButton.onClick.AddListener(IncreaseDiscCount);
         RefreshDisplay();
+        RefreshMoveCount(hanoiTower.Moves);
     }
 
     private void OnDestroy()
     {
+        if (hanoiTower != null && hanoiTower.onMoveCountChanged != null)
+            hanoiTower.onMoveCountChanged.RemoveListener(RefreshMoveCount);
         if (decreaseButton != null)
             decreaseButton.onClick.RemoveListener(DecreaseDiscCount);
         if (increaseButton != null)
             increaseButton.onClick.RemoveListener(IncreaseDiscCount);
+    }
+
+    private bool FindMoveCountText()
+    {
+        if (moveCountText == null)
+        {
+            TMP_Text[] sceneTexts = FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (TMP_Text text in sceneTexts)
+            {
+                if (text.gameObject.scene == gameObject.scene &&
+                    (text.text.IndexOf("Moves", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                     text.gameObject.name.IndexOf("Moves", System.StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    moveCountText = text;
+                    break;
+                }
+            }
+        }
+
+        if (moveCountText == null)
+        {
+            Debug.LogError("DiscSelector could not find a TMP text containing 'Moves'. Assign the existing Moves text in the Inspector.", this);
+            return false;
+        }
+
+        moveCountText.raycastTarget = false;
+        return true;
+    }
+
+    private void RefreshMoveCount(int moveCount)
+    {
+        moveCountText.text = $"Moves: {moveCount}";
     }
 
     private void IncreaseDiscCount()
