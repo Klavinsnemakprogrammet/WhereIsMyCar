@@ -1114,6 +1114,8 @@ MonoBehaviour:
   - {fileID: 4911851558913786315, guid: d49435cec9fbe004690135eba9931b45, type: 3}
   - {fileID: 4717561126780394411, guid: bfaff9dc335317549ae84ea07b758c96, type: 3}
   - {fileID: -5985649082479903091, guid: 874c9c4d1ed77484c89b823c91fa3df8, type: 3}
+  homeButtonSprite: {fileID: -5601767544888516966, guid: b4def559c96ed411aa5a67ab13fe48a1, type: 3}
+  restartButtonSprite: {fileID: 8572043569924737516, guid: a2fcc0ced3b024deaa09ab246741b5e3, type: 3}
 --- !u!114 &1726797326
 MonoBehaviour:
   m_ObjectHideFlags: 0

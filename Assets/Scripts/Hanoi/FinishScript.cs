@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FinishScript : MonoBehaviour
@@ -8,11 +9,15 @@ public class FinishScript : MonoBehaviour
     [SerializeField] private Canvas canvas;
     [Tooltip("Assign the one-star, two-star, and three-star victory panels in that order.")]
     [SerializeField] private Sprite[] victoryScreens = new Sprite[3];
+    [SerializeField] private Sprite homeButtonSprite;
+    [SerializeField] private Sprite restartButtonSprite;
 
     private GameObject overlay;
     private Image victoryImage;
     private TMP_Text elapsedTimeText;
     private TMP_FontAsset elapsedTimeFont;
+    private RectTransform homeButtonRect;
+    private RectTransform restartButtonRect;
     private float startTime;
 
     private void Awake()
@@ -49,6 +54,13 @@ public class FinishScript : MonoBehaviour
                 enabled = false;
                 return;
             }
+        }
+
+        if (homeButtonSprite == null || restartButtonSprite == null)
+        {
+            Debug.LogError("FinishScript needs home and restart button sprites assigned.", this);
+            enabled = false;
+            return;
         }
 
         elapsedTimeFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
@@ -115,13 +127,52 @@ public class FinishScript : MonoBehaviour
         elapsedTimeText.alignment = TextAlignmentOptions.MidlineLeft;
         elapsedTimeText.color = Color.white;
         elapsedTimeText.outlineColor = new Color(0.82f, 0.55f, 0.19f);
-        elapsedTimeText.outlineWidth = 0.3f;
+        elapsedTimeText.outlineWidth = 0.6f;
         Material timeMaterial = elapsedTimeText.fontMaterial;
         timeMaterial.SetColor(ShaderUtilities.ID_FaceColor, Color.white);
         timeMaterial.SetColor(ShaderUtilities.ID_OutlineColor, new Color(0.82f, 0.55f, 0.19f));
         elapsedTimeText.fontStyle = FontStyles.Bold;
         elapsedTimeText.raycastTarget = false;
+
+        homeButtonRect = CreateButton(panelRect, "HomeButton", homeButtonSprite, new Vector2(0.12f, 0.1f), GoHome);
+        restartButtonRect = CreateButton(panelRect, "RestartButton", restartButtonSprite, new Vector2(0.88f, 0.1f), Restart);
         overlay.SetActive(false);
+    }
+
+    private RectTransform CreateButton(Transform parent, string objectName, Sprite sprite, Vector2 anchor, UnityEngine.Events.UnityAction onClick)
+    {
+        GameObject buttonObject = new GameObject(
+            objectName,
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(Image),
+            typeof(Button));
+        RectTransform buttonRect = buttonObject.GetComponent<RectTransform>();
+        buttonRect.SetParent(parent, false);
+        buttonRect.anchorMin = anchor;
+        buttonRect.anchorMax = anchor;
+        buttonRect.sizeDelta = new Vector2(52f, 52f);
+
+        Image buttonImage = buttonObject.GetComponent<Image>();
+        buttonImage.sprite = sprite;
+        buttonImage.preserveAspect = true;
+        buttonImage.raycastTarget = true;
+
+        Button button = buttonObject.GetComponent<Button>();
+        button.targetGraphic = buttonImage;
+        button.transition = Selectable.Transition.None;
+        button.onClick.AddListener(onClick);
+        return buttonRect;
+    }
+
+    private void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private static void GoHome()
+    {
+        SceneManager.LoadScene("StartScene");
     }
 
     private void ShowVictory()
@@ -145,6 +196,8 @@ public class FinishScript : MonoBehaviour
             canvasRect.rect.width * 0.9f / width,
             canvasRect.rect.height * 0.95f / height);
         panelRect.sizeDelta = new Vector2(width * fit, height * fit);
+        homeButtonRect.sizeDelta = new Vector2(52f * fit, 52f * fit);
+        restartButtonRect.sizeDelta = new Vector2(52f * fit, 52f * fit);
         elapsedTimeText.fontSize = 42f * fit;
         elapsedTimeText.fontSizeMin = 24f * fit;
         elapsedTimeText.fontSizeMax = 42f * fit;
