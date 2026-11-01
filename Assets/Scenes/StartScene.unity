@@ -467,9 +467,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1480848493}
-        m_TargetAssemblyTypeName: StartGameScript, Assembly-CSharp
-        m_MethodName: StartGame
+      - m_Target: {fileID: 1480848496}
+        m_TargetAssemblyTypeName: StartHanoiScript, Assembly-CSharp
+        m_MethodName: StartHanoi
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
