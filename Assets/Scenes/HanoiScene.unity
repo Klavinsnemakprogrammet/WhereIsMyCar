@@ -1049,6 +1049,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1726797324}
   - component: {fileID: 1726797323}
+  - component: {fileID: 1726797325}
+  - component: {fileID: 1726797326}
+  - component: {fileID: 1726797327}
   m_Layer: 0
   m_Name: ScriptHolder
   m_TagString: Untagged
@@ -1079,10 +1082,11 @@ MonoBehaviour:
   - {fileID: 624266852}
   - {fileID: 150989390}
   - {fileID: 707972117}
-  discHeight: 0.3
-  baseOffset: 0.15
-  liftHeight: 3
-  moveSpeed: 10
+  largestDiscWidth: 420
+  smallestDiscWidth: 210
+  uiBaseOffset: 0
+  uiLiftHeight: 24
+  uiMoveSpeed: 1000
   onWin:
     m_PersistentCalls:
       m_Calls: []
@@ -1092,6 +1096,53 @@ MonoBehaviour:
   onMoveCountChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1726797327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726797322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11e44685c61c645f99f2f17e0e81e5b7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  hanoiTower: {fileID: 1726797323}
+  canvas: {fileID: 983319033}
+  victoryScreens:
+  - {fileID: 4911851558913786315, guid: d49435cec9fbe004690135eba9931b45, type: 3}
+  - {fileID: 4717561126780394411, guid: bfaff9dc335317549ae84ea07b758c96, type: 3}
+  - {fileID: -5985649082479903091, guid: 874c9c4d1ed77484c89b823c91fa3df8, type: 3}
+--- !u!114 &1726797326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726797322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3acea2f6bc94780918b42161a95b31, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  hanoiTower: {fileID: 1726797323}
+  startingDiscCount: 6
+  decreaseButton: {fileID: 0}
+  increaseButton: {fileID: 0}
+  countText: {fileID: 0}
+--- !u!114 &1726797325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726797322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb3322e07424e493fb8abb640b9b5bd4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!4 &1726797324
 Transform:
   m_ObjectHideFlags: 0
