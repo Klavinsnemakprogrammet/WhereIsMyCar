@@ -8,13 +8,19 @@ public class BannerAd : MonoBehaviour
     string _adUnitId;
     [SerializeField] Button _bannerButton;
     public bool isBannerVisable = false;
-
     [SerializeField] BannerPosition bannerPosition = BannerPosition.BOTTOM_CENTER;
     void Awake()
     {
         _adUnitId = _AndroidAdUnitId;
+        isBannerVisable = false;
         Advertisement.Banner.SetPosition(bannerPosition);
 
+    }
+
+    public void SetPosition(BannerPosition position)
+    {
+        bannerPosition = position;
+        Advertisement.Banner.SetPosition(bannerPosition);
     }
     public void LoadBanner()
     {

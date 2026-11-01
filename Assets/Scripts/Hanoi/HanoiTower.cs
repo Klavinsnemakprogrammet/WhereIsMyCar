@@ -229,6 +229,15 @@ public class HanoiTower : MonoBehaviour
         ResetPuzzle();
     }
 
+    public void ApplyRewardedMoveDiscount(int count)
+    {
+        if (count <= 0 || won)
+            return;
+
+        moves = Mathf.Max(0, moves - count);
+        onMoveCountChanged?.Invoke(moves);
+    }
+
     [ContextMenu("Reset Puzzle")]
     public void ResetPuzzle()
     {

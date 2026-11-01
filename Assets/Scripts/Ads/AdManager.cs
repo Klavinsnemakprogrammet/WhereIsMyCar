@@ -9,14 +9,15 @@ public class AdManager : MonoBehaviour
     public InterstitialAd interstitialAd;
     [SerializeField] bool turnOffInterstitialAds = false;
     public RewardedAds rewardedAds;
+    private HanoiRewardedAds hanoiRewardedAds;
     [SerializeField] bool turnOffRewardedAds = false;
     public BannerAd bannerAd;
     [SerializeField] bool turnOffBannerAds = false;
 
     public static AdManager Instance { get; private set; }
 
-    private bool firstAdShown;
     private bool adsLoaded;
+    private bool showInterstitialOnHanoiEntry;
 
 
     private void Awake()
@@ -33,6 +34,7 @@ public class AdManager : MonoBehaviour
         adsInitializer ??= GetComponent<AdsInitializer>();
         interstitialAd ??= GetComponent<InterstitialAd>();
         rewardedAds ??= GetComponent<RewardedAds>();
+        hanoiRewardedAds = FindFirstObjectByType<HanoiRewardedAds>();
         bannerAd ??= GetComponent<BannerAd>();
 
         if (adsInitializer != null)
@@ -69,10 +71,7 @@ public class AdManager : MonoBehaviour
             interstitialAd.LoadAd();
         }
 
-        if (!turnOffRewardedAds && rewardedAds != null)
-        {
-            rewardedAds.LoadAd();
-        }
+        LoadRewardedAd();
 
         if (!turnOffBannerAds && bannerAd != null)
         {
@@ -82,10 +81,9 @@ public class AdManager : MonoBehaviour
 
     private void HandleInterstitialReady()
     {
-        if (!firstAdShown)
+        if (showInterstitialOnHanoiEntry && !turnOffInterstitialAds && interstitialAd != null)
         {
-            Debug.Log("Showing interstitial ad for the first time!");
-            firstAdShown = true;
+            showInterstitialOnHanoiEntry = false;
             interstitialAd.ShowAd();
         }
 
@@ -104,6 +102,15 @@ public class AdManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        showInterstitialOnHanoiEntry = scene.name == "HanoiScene" && !turnOffInterstitialAds;
+        hanoiRewardedAds = FindFirstObjectByType<HanoiRewardedAds>();
+        if (hanoiRewardedAds != null)
+        {
+            hanoiRewardedAds.SetButton(FindButton("RewardedAdButton"));
+            if (adsLoaded && !turnOffRewardedAds)
+                hanoiRewardedAds.LoadAd();
+        }
+
         if (interstitialAd != null)
         {
             Button interstitialButton = FindButton("InterstitialAdButton");
@@ -113,18 +120,21 @@ public class AdManager : MonoBehaviour
             }
         }
 
-        rewardedAds ??= FindFirstObjectByType<RewardedAds>();
-        if (rewardedAds != null)
+        if (hanoiRewardedAds == null)
         {
-            Button rewardedAdButton = FindButton("RewardedAdButton");
-            if (rewardedAdButton != null)
+            rewardedAds ??= FindFirstObjectByType<RewardedAds>();
+            if (rewardedAds != null)
             {
-                rewardedAds.SetButton(rewardedAdButton);
-            }
+                Button rewardedAdButton = FindButton("RewardedAdButton");
+                if (rewardedAdButton != null)
+                {
+                    rewardedAds.SetButton(rewardedAdButton);
+                }
 
-            if (adsLoaded && !turnOffRewardedAds)
-            {
-                rewardedAds.LoadAd();
+                if (adsLoaded && !turnOffRewardedAds)
+                {
+                    rewardedAds.LoadAd();
+                }
             }
         }
 
@@ -135,7 +145,35 @@ public class AdManager : MonoBehaviour
             {
                 bannerAd.SetButton(bannerAdButton);
             }
+
+            if (scene.name == "HanoiScene")
+            {
+                bannerAd.SetPosition(BannerPosition.BOTTOM_CENTER);
+                if (!bannerAd.isBannerVisable)
+                    bannerAd.ShowBannerAd();
+            }
         }
+
+        if (showInterstitialOnHanoiEntry && interstitialAd != null && interstitialAd.isReady)
+        {
+            HandleInterstitialReady();
+        }
+    }
+
+    private void LoadRewardedAd()
+    {
+        if (turnOffRewardedAds)
+            return;
+
+        hanoiRewardedAds ??= FindFirstObjectByType<HanoiRewardedAds>();
+        if (hanoiRewardedAds != null)
+        {
+            hanoiRewardedAds.LoadAd();
+            return;
+        }
+
+        if (rewardedAds != null)
+            rewardedAds.LoadAd();
     }
 
     private static Button FindButton(string tag)
