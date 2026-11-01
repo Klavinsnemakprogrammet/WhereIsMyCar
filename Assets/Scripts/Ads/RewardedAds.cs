@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
@@ -12,145 +11,93 @@ public class RewardedAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
     [SerializeField] Button _rewardedAdButton;
     public FlyingObjectManager flyingObjectManager;
 
-    public event Action OnRewardedAdCompleted;
-
-    private bool isLoading;
-    private bool isReady;
-    private bool isShowing;
-
-    private void Awake()
+    
+    void Awake()
     {
         _adUnitId = _androidAdUnitId;
-        if (flyingObjectManager == null)
+        if(flyingObjectManager == null)
             flyingObjectManager = FindFirstObjectByType<FlyingObjectManager>();
+        
     }
 
     public void LoadAd()
     {
-        if (!Advertisement.isInitialized)
+        if(!Advertisement.isInitialized)
         {
-            Debug.LogWarning("Tried to load rewarded ad before Unity Ads was initialized.", this);
+            Debug.Log("Tried to load ad before unity ads was initialized");
             return;
         }
-
-        if (isLoading || isReady || isShowing)
-            return;
-
-        isLoading = true;
-        Debug.Log("Loading rewarded ad: " + _adUnitId);
+        Debug.Log("Loading rewarded Ad: " + _adUnitId);
         Advertisement.Load(_adUnitId, this);
     }
 
     public void OnUnityAdsAdLoaded(string placementId)
     {
-        if (placementId != _adUnitId)
-            return;
-
-        isLoading = false;
-        isReady = true;
-        if (_rewardedAdButton != null)
+        if(placementId.Equals(_adUnitId))
+        {
+            
             _rewardedAdButton.interactable = true;
+        }
     }
 
     public void ShowAd()
     {
-        if (!isReady || isShowing || !Advertisement.isInitialized)
-        {
-            Debug.LogWarning("Rewarded ad is not ready to show.", this);
-            return;
-        }
+        // velak japaslepj banner ad
 
-        isReady = false;
-        isShowing = true;
-        if (_rewardedAdButton != null)
-            _rewardedAdButton.interactable = false;
-
-        if (AdManager.Instance != null &&
-            AdManager.Instance.bannerAd != null &&
-            AdManager.Instance.bannerAd.isBannerVisable)
-        {
-            AdManager.Instance.bannerAd.HideBannerAd();
-        }
-
+        _rewardedAdButton.interactable = false;
         Advertisement.Show(_adUnitId, this);
     }
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
-        if (placementId != _adUnitId)
-            return;
-
-        isLoading = false;
-        Debug.LogWarning($"Error loading rewarded ad unit {placementId}: {error} - {message}", this);
+        Debug.Log($"Error loading rewarded Ad Unit {placementId}: {error.ToString()} - {message}");
         StartCoroutine(WaitAndLoadAd(10f));
     }
 
     private IEnumerator WaitAndLoadAd(float delay)
     {
-        yield return new WaitForSecondsRealtime(delay);
+        yield return new WaitForSeconds(delay);
         LoadAd();
     }
 
     public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
     {
-        if (placementId != _adUnitId)
-            return;
-
-        isShowing = false;
-        Time.timeScale = 1f;
-        Debug.LogError($"Error showing rewarded ad unit {placementId}: {error} - {message}", this);
-        ShowBannerAfterAd();
+        Debug.Log($"Error showing rewarded Ad Unit {placementId}: {error.ToString()} - {message}");
         StartCoroutine(WaitAndLoadAd(10f));
     }
-
+    
     public void OnUnityAdsShowStart(string placementId)
     {
-        if (placementId != _adUnitId)
-            return;
-
         Time.timeScale = 0f;
+
     }
 
     public void OnUnityAdsShowClick(string placementId)
     {
-        Debug.Log("User clicked on the rewarded ad: " + placementId, this);
+        Debug.Log("User clicked on the rewarded ad: " + placementId);
     }
 
     public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
     {
-        if (placementId != _adUnitId)
-            return;
-
-        isShowing = false;
-        Time.timeScale = 1f;
-        if (showCompletionState == UnityAdsShowCompletionState.COMPLETED)
+        if(placementId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
         {
-            Debug.Log("Unity Ads rewarded ad completed.", this);
-            if (flyingObjectManager != null)
-                flyingObjectManager.DestroyAllFlyingObjects();
-            OnRewardedAdCompleted?.Invoke();
+            Debug.Log("Unity Ads Rewarded Ad Completed");
+            flyingObjectManager.DestroyAllFlyingObjects();
+            _rewardedAdButton.interactable = false;     
+            StartCoroutine(WaitAndLoadAd(15f));
         }
-
-        if (_rewardedAdButton != null)
-            _rewardedAdButton.interactable = false;
-        ShowBannerAfterAd();
-        StartCoroutine(WaitAndLoadAd(15f));
+        Time.timeScale = 1f;
     }
 
     public void SetButton(Button button)
     {
-        if (button == null)
+        if(button == null)
             return;
-
+        
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(ShowAd);
         _rewardedAdButton = button;
-        _rewardedAdButton.interactable = isReady;
-    }
-
-    private static void ShowBannerAfterAd()
-    {
-        if (AdManager.Instance != null && AdManager.Instance.bannerAd != null)
-            AdManager.Instance.bannerAd.ShowBannerAd();
+        _rewardedAdButton.interactable = false;
     }
 }
+
