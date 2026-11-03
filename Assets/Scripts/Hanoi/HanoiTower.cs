@@ -22,6 +22,10 @@ public class HanoiTower : MonoBehaviour
     [SerializeField, Min(0f)] private float uiLiftHeight = 24f;
     [SerializeField, Min(1f)] private float uiMoveSpeed = 1000f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource moveAudioSource;
+    [SerializeField] private AudioClip moveSound;
+
     [Header("Events")]
     public UnityEvent onWin;
     public UnityEvent onInvalidMove;
@@ -386,6 +390,9 @@ public class HanoiTower : MonoBehaviour
         stacks[targetPeg].Push(disc);
         yield return MoveTo(disc, GetAbovePegsPosition(disc, targetPeg));
         yield return MoveTo(disc, GetSlotPosition(targetPeg, heightBelowDisc, disc));
+
+        if (moveAudioSource != null && moveSound != null)
+            moveAudioSource.PlayOneShot(moveSound);
 
         selectedDisc = null;
         selectedFrom = -1;

@@ -2109,6 +2109,8 @@ MonoBehaviour:
   uiBaseOffset: 0
   uiLiftHeight: 24
   uiMoveSpeed: 1500
+  moveAudioSource: {fileID: 1507031929}
+  moveSound: {fileID: 8300000, guid: a1e1b09da317d47bba6869b51c328d90, type: 3}
   onWin:
     m_PersistentCalls:
       m_Calls: []
