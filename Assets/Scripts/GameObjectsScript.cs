@@ -126,6 +126,37 @@ public class GameObjectsScript : MonoBehaviour
         firefighterCoord = firefighter.GetComponent<RectTransform>().localPosition;
     }
 
+    public bool ReturnCarToSpawn(GameObject car)
+    {
+        if (car == garbageTruck) return RestoreSpawnPosition(car, garbageTruckCoord);
+        if (car == medicine) return RestoreSpawnPosition(car, medicineCoord);
+        if (car == schoolBus) return RestoreSpawnPosition(car, schoolBusCoord);
+        if (car == police) return RestoreSpawnPosition(car, policeCoord);
+        if (car == b2) return RestoreSpawnPosition(car, b2Coord);
+        if (car == cement) return RestoreSpawnPosition(car, cementCoord);
+        if (car == escavator) return RestoreSpawnPosition(car, escavatorCoord);
+        if (car == e46) return RestoreSpawnPosition(car, e46Coord);
+        if (car == e61) return RestoreSpawnPosition(car, e61Coord);
+        if (car == tractor1) return RestoreSpawnPosition(car, tractor1Coord);
+        if (car == tractor5) return RestoreSpawnPosition(car, tractor5Coord);
+        if (car == firefighter) return RestoreSpawnPosition(car, firefighterCoord);
+
+        return false;
+    }
+
+    bool RestoreSpawnPosition(GameObject car, Vector2 position)
+    {
+        RectTransform rectTransform = car.GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            Debug.LogError($"Cannot return {car.name} to its spawn: it has no RectTransform.");
+            return false;
+        }
+
+        rectTransform.localPosition = position;
+        return true;
+    }
+
     void FlipRandomly(RectTransform rt)
     {
         if (Random.value < flipChance)

@@ -12,6 +12,8 @@ public class LivesScript : MonoBehaviour
     public Sprite emptyHeart;       // optional
     public GameObject gameOverPanel; // optional
 
+    public GameFinishScript gameFinishScript;
+
     public static bool isGameOver = false;
 
     private int lives;
@@ -21,6 +23,9 @@ public class LivesScript : MonoBehaviour
         Time.timeScale = 1f;
         isGameOver = false;
         lives = maxLives;
+
+        if (gameFinishScript == null)
+            gameFinishScript = Object.FindFirstObjectByType<GameFinishScript>();
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
@@ -63,8 +68,12 @@ public class LivesScript : MonoBehaviour
         isGameOver = true;
         Debug.Log("Game Over!");
 
-        if (gameOverPanel != null)
+        if (gameFinishScript != null)
+            gameFinishScript.ShowGameOver();
+        else if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
+        else
+            Debug.LogError("No game-over screen is assigned or available in the scene.");
 
         Time.timeScale = 0f; // freeze the game
     }

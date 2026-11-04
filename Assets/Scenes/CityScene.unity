@@ -3467,6 +3467,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 700973180}
+  - component: {fileID: 700973181}
   m_Layer: 0
   m_Name: Hearts
   m_TagString: Untagged
@@ -3496,6 +3497,27 @@ RectTransform:
   m_AnchoredPosition: {x: -50, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &700973181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700973179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e190d1fa8f4bc408852dc27efbfeee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLives: 3
+  hearts:
+  - {fileID: 1213033116}
+  - {fileID: 1317991022}
+  - {fileID: 1221445637}
+  fullHeart: {fileID: 0}
+  emptyHeart: {fileID: 0}
+  gameOverPanel: {fileID: 0}
+  gameFinishScript: {fileID: 449420546}
 --- !u!1 &702965262
 GameObject:
   m_ObjectHideFlags: 0
@@ -8271,7 +8293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1261, y: 557.28}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2134308885

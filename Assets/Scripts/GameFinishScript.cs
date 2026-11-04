@@ -103,6 +103,18 @@ public class GameFinishScript : MonoBehaviour
             audioSource.PlayOneShot(victorySound);
     }
 
+    public void ShowGameOver()
+    {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        if (timeText != null)
+            timeText.text = "Game Over";
+
+        UpdateStars(0);
+        SetVictoryObjectsActive(true);
+    }
+
     int GetStarCount(float seconds)
     {
         if (seconds <= threeStarTime) return 3;

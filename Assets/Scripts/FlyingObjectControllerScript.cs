@@ -11,6 +11,7 @@ public class FlyingObjectControllerScript : MonoBehaviour
     public float waveFrequency = 1f;
 
     private GameObjectsScript gameObjectsScript;
+    private LivesScript livesScript;
     private ScreenBoundariesScript screenBoundariesScript;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -32,7 +33,10 @@ public class FlyingObjectControllerScript : MonoBehaviour
             originalColor = image.color;
 
         gameObjectsScript = Object.FindFirstObjectByType<GameObjectsScript>();
+        livesScript = Object.FindFirstObjectByType<LivesScript>();
         screenBoundariesScript = Object.FindFirstObjectByType<ScreenBoundariesScript>();
+        if (livesScript == null)
+            Debug.LogError("No LivesScript found in the scene. Flying-object hits cannot reduce lives.");
         StartCoroutine(FadeIn());
     }
 
@@ -86,6 +90,9 @@ public class FlyingObjectControllerScript : MonoBehaviour
             RectTransformUtility.RectangleContainsScreenPoint(rectTransform, inputPosition, Camera.main))
         {
             Debug.Log("The cursor collided with a flying object!");
+            if (livesScript != null)
+                livesScript.LoseLife();
+
             if (GameObjectsScript.lastDragged != null)
             {
                 StartCoroutine(ShrinkAndDestroy(GameObjectsScript.lastDragged, 0.5f));
